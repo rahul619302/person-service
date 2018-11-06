@@ -12,7 +12,7 @@ public class PersonUtil implements IPersonUtil {
 
     public Response getResponse(Response response, Person person, String name) {
         Map<String, Object> map = response.getMap();
-        map.put("person", person);
+        map.put(name, person);
         response.setMap(map);
         return response;
     }

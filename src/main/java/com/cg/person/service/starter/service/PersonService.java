@@ -27,20 +27,13 @@ public class PersonService implements IPersonService {
     @Autowired
     private IWebServiceCall webServiceCall;
 
-
     @Override
     @Transactional(readOnly = false)
     public Response savePerson(Request request) {
         Response response = null;
         Integer id = personDao.getMaxId();
         request.setParam3((id != null ? id + 1 : 1) + "");
-        if ("employee".equalsIgnoreCase(request.getParam2()))
-            response = webServiceCall.callPostService("employee/save", "employee", request);
-        else if ("student".equalsIgnoreCase(request.getParam2()))
-            response = webServiceCall.callPostService("student/save", "student", request);
-        else
-            response = personUtil.getAllPersons();
-
+        response = getResponse(request);
         if (PersonConstants.S200.getMessage().equalsIgnoreCase(response.getStatusDiscription())) {
             Person person = new Person(0, request.getParam1(), request.getParam2());
             person = personDao.save(person);
@@ -51,19 +44,27 @@ public class PersonService implements IPersonService {
 
     @Override
     public Response getPerson(Integer id) {
-
         Optional<Person> personOptional = personDao.findById(id);
         if (!personOptional.isPresent())
             return personUtil.invalidPersonIdResponse();
-
-        Response response = null;
         Person person = personOptional.get();
-        if ("employee".equalsIgnoreCase(person.getType()))
-            response = webServiceCall.callGetService("employee/get", "employee", id + "");
-        if ("student".equalsIgnoreCase(person.getType()))
-            response = webServiceCall.callGetService("student/get", "student", id + "");
+        return getResponse(id, person);
+    }
 
-        return response;
+    private Response getResponse(Request request) {
+        if ("employee".equalsIgnoreCase(request.getParam2()))
+            return webServiceCall.callPostService("employee/save", "employee", request);
+        else if ("student".equalsIgnoreCase(request.getParam2()))
+            return webServiceCall.callPostService("student/save", "student", request);
+        else
+            return personUtil.getAllPersons();
+    }
+
+    private Response getResponse(Integer id, Person person) {
+        if ("employee".equalsIgnoreCase(person.getType()))
+            return webServiceCall.callGetService("employee/get", "employee", id + "");
+        else
+            return webServiceCall.callGetService("student/get", "student", id + "");
     }
 
 
