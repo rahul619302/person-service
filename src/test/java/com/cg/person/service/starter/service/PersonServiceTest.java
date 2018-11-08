@@ -53,7 +53,6 @@ class PersonServiceTest {
     void getPerson() {
         BDDMockito.given(personDao.findById(Mockito.anyInt())).willReturn(Optional.of(person));
         Response response11=new Response(PersonConstants.S401, PersonConstants.S401.getMessage());
-        BDDMockito.given(personUtil.invalidPersonIdResponse()).willReturn(response11);
         BDDMockito.given(webServiceCall.callGetService(Mockito.any(String.class), Mockito.any(String.class), Mockito.any(String.class))).willReturn(response);
         Response response1 = personService.getPerson(1);
         Assert.assertThat(response, Is.is(response1));

@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -44,11 +42,22 @@ public class PersonService implements IPersonService {
 
     @Override
     public Response getPerson(Integer id) {
-        Optional<Person> personOptional = personDao.findById(id);
-        if (!personOptional.isPresent())
-            return personUtil.invalidPersonIdResponse();
-        Person person = personOptional.get();
-        return getResponse(id, person);
+        if (id == null) {
+            List<Person> persons = personDao.findAll();
+            Response response = new Response(PersonConstants.S200, PersonConstants.S200.getMessage());
+            List<Object> objects = new ArrayList<>();
+            for (Person person : persons) {
+                Response response1 = getResponse(null, person);
+                response.setMap(response1.getMap());
+            }
+            return response;
+        } else {
+            Optional<Person> personOptional = personDao.findById(id);
+            if (!personOptional.isPresent())
+                return personUtil.invalidPersonIdResponse();
+            Person person = personOptional.get();
+            return getResponse(id, person);
+        }
     }
 
     private Response getResponse(Request request) {
