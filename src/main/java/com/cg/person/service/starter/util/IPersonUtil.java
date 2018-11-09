@@ -5,7 +5,7 @@ import com.cg.person.service.starter.pojo.Person;
 
 public interface IPersonUtil {
 
-    Response getResponse(Response response, Person person, String name);
+    Response getSuccessResponse();
     Response getAllPersons();
     Response invalidPersonIdResponse();
 }

@@ -44,7 +44,7 @@ class PersonServiceTest {
         BDDMockito.given(personDao.getMaxId()).willReturn(1);
         BDDMockito.given(webServiceCall.callPostService(Mockito.any(String.class), Mockito.any(String.class), Mockito.any(Request.class))).willReturn(response);
         BDDMockito.given(personDao.save(Mockito.any(Person.class))).willReturn(person);
-        BDDMockito.given(personUtil.getResponse(Mockito.any(Response.class), Mockito.any(Person.class), Mockito.any(String.class))).willReturn(response);
+        BDDMockito.given(personUtil.getSuccessResponse()).willReturn(response);
         Response response1 = personService.savePerson(request);
         Assert.assertThat(response, Is.is(response1));
     }

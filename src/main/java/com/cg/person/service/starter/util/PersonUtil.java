@@ -10,11 +10,8 @@ import java.util.*;
 @Component
 public class PersonUtil implements IPersonUtil {
 
-    public Response getResponse(Response response, Person person, String name) {
-        Map<String, Object> map = response.getMap();
-        map.put(name, person);
-        response.setMap(map);
-        return response;
+    public Response getSuccessResponse() {
+        return new Response(PersonConstants.S200, PersonConstants.S200.getMessage());
     }
 
     public Response getAllPersons() {

@@ -21,14 +21,8 @@ class PersonUtilTest {
     private PersonUtil personUtil;
 
     @Test
-    void getResponse() {
-        Map<String, Object> map=new HashMap<>();
-        Response response=new Response();
-        response.setMap(map);
-        Person person=new Person(1, "Rahul Singh", "student");
-        map.put("person", person);
-        Response response1=personUtil.getResponse(response, person, "person");
-        Assert.assertThat(response, Is.is(response1));
+    void getSuccessResponse() {
+        Assert.assertThat(new Response(PersonConstants.S200, PersonConstants.S200.getMessage()), Is.is(personUtil.getSuccessResponse()));
     }
 
     @Test
@@ -39,14 +33,11 @@ class PersonUtilTest {
         map.put("message", "Please Use Only Below Person Type");
         map.put("personTypes", list);
         response.setMap(map);
-        Response response1=personUtil.getAllPersons();
-        Assert.assertThat(response, Is.is(response1));
+        Assert.assertThat(response, Is.is(personUtil.getAllPersons()));
     }
 
     @Test
     void invalidPersonIdResponse() {
-        Response response=new Response(PersonConstants.S401, PersonConstants.S401.getMessage());
-        Response response1=personUtil.invalidPersonIdResponse();
-        Assert.assertThat(response, Is.is(response1));
+        Assert.assertThat(new Response(PersonConstants.S401, PersonConstants.S401.getMessage()), Is.is(personUtil.invalidPersonIdResponse()));
     }
 }

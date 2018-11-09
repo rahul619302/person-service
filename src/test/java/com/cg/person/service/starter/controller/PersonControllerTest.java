@@ -43,30 +43,28 @@ class PersonControllerTest {
     @Test
     void savePerson() throws Exception {
         BDDMockito.given(personService.savePerson(Mockito.any(Request.class))).willReturn(expectedResponse);
-        callPostRequest("/person/save");
+        Assert.assertThat(objectMapper.writeValueAsString(expectedResponse), Is.is(callPostRequest("/person/save")));
     }
 
     @Test
     void getPerson() throws Exception {
         BDDMockito.given(personService.getPerson(Mockito.any(Integer.class))).willReturn(expectedResponse);
-        callGetRequest("/person/get/1");
+        Assert.assertThat(objectMapper.writeValueAsString(expectedResponse), Is.is(callGetRequest("/person/get/1")));
     }
 
-    private void callPostRequest(String url) throws Exception {
-        String acctualResponse = mockMvc.perform(MockMvcRequestBuilders
+    private String callPostRequest(String url) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
                 .post(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(new Request()))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
-        Assert.assertThat(objectMapper.writeValueAsString(expectedResponse), Is.is(acctualResponse));
     }
 
-    private void callGetRequest(String url) throws Exception {
-        String acctualResponse = mockMvc.perform(MockMvcRequestBuilders
+    private String callGetRequest(String url) throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
                 .get(url)
                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString();
-        Assert.assertThat(objectMapper.writeValueAsString(expectedResponse), Is.is(acctualResponse));
     }
 }

@@ -32,10 +32,10 @@ public class PersonService implements IPersonService {
         Integer id = personDao.getMaxId();
         request.setParam3((id != null ? id + 1 : 1) + "");
         response = getResponse(request);
-        if (PersonConstants.S200.getMessage().equalsIgnoreCase(response.getStatusDiscription())) {
+        if (PersonConstants.S200.equals(response.getStatus()) || PersonConstants.S403.equals(response.getStatus())) {
             Person person = new Person(0, request.getParam1(), request.getParam2());
             person = personDao.save(person);
-            response = personUtil.getResponse(response, person, "person");
+            response=personUtil.getSuccessResponse();
         }
         return response;
     }
